@@ -1,0 +1,56 @@
+
+main {
+	color: #bfbfbf;
+}
+
+/* UV index 1-2 */
+.uv-low {
+	background-color: green;
+}
+
+/* UV index 3-5 */
+.uv-moderate {
+	background-color: yellow;
+}
+
+/* UV index 6-7 */
+.uv-high {
+	background-color: orange;
+}
+
+/* UV index 8-10 */
+.uv-vhigh {
+	background-color: red;
+}
+
+/* UV index 11+ */
+.uv-extreme {
+	background-color: purple;
+}
+
+/* Superscript text */
+.superscript {
+	vertical-align: super;
+	font-size: .5em;
+}
+
+.current-data, .fcast-data {
+	margin-bottom: 0;
+	padding: 0.8rem 0;
+}
+
+.current-data, .fcast-day, .fcast-max {
+	font-size: 1.2em;
+}
+
+.fcast-max {
+	font-weight: bolder;
+}
+
+.fcast-day {
+	float: left;
+}
+
+.data-value {
+	float: right;
+}
