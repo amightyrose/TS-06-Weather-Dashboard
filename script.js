@@ -1,11 +1,6 @@
 
-// Declare some variables
 
-var strQueryURL;
-var strLocation;
 var strAPIKey = "c0a33413999e48a90c147ca5b83f5dc1";
-var arrForecastWeather = [];
-var strCity = "";
 
 
 
@@ -14,7 +9,7 @@ function getWeatherData(location) {
 
 
 	// Build the query URL for getting current weather.
-	strQueryURL = `http://api.openweathermap.org/data/2.5/weather?appid=${strAPIKey}&units=metric&q=${location}`
+	let strQueryURL = `http://api.openweathermap.org/data/2.5/weather?appid=${strAPIKey}&units=metric&q=${location}`
 
 
 
@@ -64,7 +59,7 @@ function getWeatherData(location) {
 function getForecast(lat, lon) {
 
 
-	strQueryURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&units=metric&appid=${strAPIKey}`
+	let strQueryURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&units=metric&appid=${strAPIKey}`
 
 
 	// Make an ajax call.
@@ -164,28 +159,86 @@ function renderForecast(forecastData) {
 	// Loop through the array and display data for each object.
 	forecastData.forEach(function (day, i) {
 
+
+		// Put a couple of jQuery selectors into strings to make calling easier.
 		let strDiv = `#fcast-${i}`
 		let strFcastDiv = `#fcast-data-${i}`
+
+		// Convert some of the numerical data to strings and add some formatting.
 		let strIconURL = "http://openweathermap.org/img/wn/" + day.icon + "@2x.png"
 		let strDegree = String.fromCharCode(176);
 		let strMax = `${day.temp_max}${strDegree}`
 		let strHumidity = `${day.humidity}%`
 		let strPOP = Math.floor(day.rain_chance * 100).toString() + "%";
 
+
+		// Write values to the document.
 		$(`${strDiv} .fcast-day`).text(day.day);
 		$(`${strDiv} .fcast-max`).text(strMax);
-		// $(`${strDiv} .fcast-max`).text(day.temp_max);
-
 		$(`${strFcastDiv} .fcast-date`).text(day.date);
 		$(`${strFcastDiv} .fcast-img`).attr("src", strIconURL);
 		$(`${strFcastDiv} .fcast-min`).text(day.temp_min);
 		$(`${strFcastDiv} .fcast-humidity`).text(strHumidity);
 		$(`${strFcastDiv} .fcast-pop`).text(strPOP);
 
+
 	})
 
 
 }
+
+
+// Function to update the list of previously searched cities.
+function updateHistory(city) {
+
+
+	// First set the MRU in localstorage
+	localStorage.setItem("weatherMRU", city)
+
+
+	// Try and get items from storage. An array will be returned but it will be empty if there was nothing
+	// in storage. Add the new value to the array.
+	let arrHistory = getHistory();
+	arrHistory.push(city)
+
+
+	// Save back to localstorage.
+	saveHistory(arrHistory);
+
+
+}
+
+
+// This function gets items from storage and returns an array. If there was nothing in storage the array
+// is returned empty.
+function getHistory() {
+
+
+	let arrCities = localStorage.getItem("cities");
+
+	if (arrCities !== null) {
+
+		return arrCities;
+
+	}
+	else {
+
+		arrCities = [];
+		return arrCities;
+
+	}
+
+
+}
+
+
+// Saves the search history to localstorage
+function saveHistory(arrCities) {
+
+	localStorage.setItem("cities", JSON.stringify(arrCities));
+
+}
+
 
 
 // Listener for the search field
@@ -194,11 +247,16 @@ $("#citysearch").on("submit", function (event) {
 	event.preventDefault();
 	selectedCity = $("#cityselect").val();
 
+
+	// Call updateHistory to add the submitted value to the list.
+	updateHistory(selectedCity);
+
+	// Call getWeatherData to start collecting.
 	getWeatherData(selectedCity);
 
 });
 
 
 
-getWeatherData("brisbane");
+// getWeatherData("brisbane");
 // getWeatherData("brisbane", "forecast");
