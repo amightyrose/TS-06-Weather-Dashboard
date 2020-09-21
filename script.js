@@ -124,6 +124,7 @@ function getForecast(lat, lon) {
 }
 
 
+// Render current weather data on the page.
 function renderCurrent(type, data) {
 
 
@@ -136,14 +137,37 @@ function renderCurrent(type, data) {
 		$("#cur-humidity").text(`${data.humidity} %`);
 		$("#cur-wind").text(`${data.windspeed} km/h`);
 
-
-
 		// Build a URL for the weather icon and then udpate the img tag.
 		let strIconURL = "http://openweathermap.org/img/wn/" + data.icon + "@2x.png"
 		$("#current-icon").attr("src", strIconURL);
 
 	}
 	else if (type === "uvi") {
+
+		// Check the value of the UV index and colour the badge accordingly by updating css.
+		switch (true) {
+
+			case (data < 3):
+				$("#cur-uvi").css("background-color", "#006600");
+				$("#cur-uvi").css("color", "#bfbfbf");
+				break;
+			case (data < 6):
+				$("#cur-uvi").css("background-color", "#dfdf20");
+				$("#cur-uvi").css("color", "#1a1a1a");
+				break;
+			case (data < 8):
+				$("#cur-uvi").css("background-color", "#ff8000");
+				$("#cur-uvi").css("color", "#1a1a1a");
+				break;
+			case (data < 11):
+				$("#cur-uvi").css("background-color", "#b30000");
+				$("#cur-uvi").css("color", "#bfbfbf");
+				break;
+			case (data >= 11):
+				$("#cur-uvi").css("background-color", "#660066");
+				$("#cur-uvi").css("color", "#bfbfbf");
+
+		}
 
 		$("#cur-uvi").text(data)
 
@@ -310,6 +334,8 @@ $("#citysearch").on("submit", function (event) {
 	event.preventDefault();
 	let selectedCity = $("#cityselect").val().trim().toLowerCase();
 
+	// Clear the search box.
+	$("#cityselect").val("");
 
 	// Call updateHistory to add the submitted value to the list.
 	updateHistory(selectedCity);
@@ -317,13 +343,9 @@ $("#citysearch").on("submit", function (event) {
 	// Call getWeatherData to start collecting.
 	getWeatherData(selectedCity);
 
-	// Clear the search box.
-	$("#cityselect").val("");
-
 });
 
 
 
-// When the page loads, call loadWeatherScreen to render the page. If there is a MRU city in storage
-// it will load the data for it.
+// When the page loads, call loadWeatherScreen to render the page.
 loadWeatherScreen();

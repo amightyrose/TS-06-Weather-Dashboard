@@ -3,31 +3,6 @@ main {
 	color: #bfbfbf;
 }
 
-/* UV index 1-2 */
-.uv-low {
-	background-color: green;
-}
-
-/* UV index 3-5 */
-.uv-moderate {
-	background-color: yellow;
-}
-
-/* UV index 6-7 */
-.uv-high {
-	background-color: orange;
-}
-
-/* UV index 8-10 */
-.uv-vhigh {
-	background-color: red;
-}
-
-/* UV index 11+ */
-.uv-extreme {
-	background-color: purple;
-}
-
 /* Superscript text */
 .superscript {
 	vertical-align: super;
@@ -53,4 +28,9 @@ main {
 
 .data-value {
 	float: right;
+}
+
+.badge {
+	font-size: 1em;
+	font-weight: normal;
 }
