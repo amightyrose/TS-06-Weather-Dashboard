@@ -194,21 +194,58 @@ function updateHistory(city) {
 
 
 	// First set the MRU in localstorage
-	localStorage.setItem("weatherMRU", city)
+	localStorage.setItem("weatherMRU", city);
 
 
 	// Try and get items from storage. An array will be returned but it will be empty if there was nothing
-	// in storage. Add the new value to the array.
+	// in storage.
 	let arrHistory = getHistory();
-	arrHistory.push(city)
 
 
-	// Save back to localstorage.
-	saveHistory(arrHistory);
+	// Add the new value to the array if it doesn't exist.
+	if (arrHistory.includes(city) === false) {
 
+		arrHistory.push(city);
+
+		// Save back to localstorage.
+		saveHistory(arrHistory);
+
+	}
+
+
+	// Update the list we use for prepopulating the search box.
+	updateSearchList();
 
 }
 
+
+// Function to update the list used to add options to the search box.
+function updateSearchList() {
+
+
+	// Clear the existing options list just in case.
+	$("#history").html("");
+
+
+	// Try and get list from localstorage.
+	let arrCities = getHistory();
+
+
+	// If there are any cities in the array, loop through and add them to the option list.
+	if (arrCities.length > 0) {
+
+		arrCities.forEach(function (city) {
+
+			elNewOption = $("<option>");
+			elNewOption.attr("value", city);
+			$("#history").append(elNewOption);
+
+		})
+
+	}
+
+
+}
 
 // This function gets items from storage and returns an array. If there was nothing in storage the array
 // is returned empty.
@@ -217,18 +254,17 @@ function getHistory() {
 
 	let arrCities = localStorage.getItem("cities");
 
-	if (arrCities !== null) {
+	if (arrCities === null) {
 
-		return arrCities;
+		arrCities = [];
 
 	}
 	else {
 
-		arrCities = [];
-		return arrCities;
-
+		arrCities = JSON.parse(arrCities);
 	}
 
+	return arrCities;
 
 }
 
@@ -254,11 +290,15 @@ function getMRU() {
 // if there is one, load data for it.
 function loadWeatherScreen() {
 
+
 	let city = getMRU();
 
 	if (city) {
 		getWeatherData(city);
 	}
+
+	updateSearchList();
+
 
 }
 
@@ -268,7 +308,7 @@ function loadWeatherScreen() {
 $("#citysearch").on("submit", function (event) {
 
 	event.preventDefault();
-	selectedCity = $("#cityselect").val();
+	let selectedCity = $("#cityselect").val().trim().toLowerCase();
 
 
 	// Call updateHistory to add the submitted value to the list.
@@ -276,6 +316,9 @@ $("#citysearch").on("submit", function (event) {
 
 	// Call getWeatherData to start collecting.
 	getWeatherData(selectedCity);
+
+	// Clear the search box.
+	$("#cityselect").val("");
 
 });
 
