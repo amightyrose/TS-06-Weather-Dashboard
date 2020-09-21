@@ -168,6 +168,7 @@ function renderForecast(forecastData) {
 		let strIconURL = "http://openweathermap.org/img/wn/" + day.icon + "@2x.png"
 		let strDegree = String.fromCharCode(176);
 		let strMax = `${day.temp_max}${strDegree}`
+		let strMin = `${day.temp_min}${strDegree}`
 		let strHumidity = `${day.humidity}%`
 		let strPOP = Math.floor(day.rain_chance * 100).toString() + "%";
 
@@ -177,7 +178,7 @@ function renderForecast(forecastData) {
 		$(`${strDiv} .fcast-max`).text(strMax);
 		$(`${strFcastDiv} .fcast-date`).text(day.date);
 		$(`${strFcastDiv} .fcast-img`).attr("src", strIconURL);
-		$(`${strFcastDiv} .fcast-min`).text(day.temp_min);
+		$(`${strFcastDiv} .fcast-min`).text(strMin);
 		$(`${strFcastDiv} .fcast-humidity`).text(strHumidity);
 		$(`${strFcastDiv} .fcast-pop`).text(strPOP);
 
@@ -240,6 +241,28 @@ function saveHistory(arrCities) {
 }
 
 
+// Function to retrieve the most recently searched city from storage.
+function getMRU() {
+
+	let mruCity = localStorage.getItem("weatherMRU");
+	return mruCity;
+
+}
+
+
+// Function that runs when the page is first loaded. Check for the most recent city and
+// if there is one, load data for it.
+function loadWeatherScreen() {
+
+	let city = getMRU();
+
+	if (city) {
+		getWeatherData(city);
+	}
+
+}
+
+
 
 // Listener for the search field
 $("#citysearch").on("submit", function (event) {
@@ -258,5 +281,6 @@ $("#citysearch").on("submit", function (event) {
 
 
 
-// getWeatherData("brisbane");
-// getWeatherData("brisbane", "forecast");
+// When the page loads, call loadWeatherScreen to render the page. If there is a MRU city in storage
+// it will load the data for it.
+loadWeatherScreen();
