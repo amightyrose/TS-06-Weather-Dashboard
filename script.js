@@ -1,6 +1,7 @@
 
 var strAPIKey = "c0a33413999e48a90c147ca5b83f5dc1";
 var strCurrentDisplay;
+var strPreviousDisplay;
 
 
 
@@ -238,7 +239,7 @@ function renderForecast(forecastData) {
 }
 
 
-// Function to update the list of previously searched cities.
+// Function to update the list of previously searched cities in localstorage.
 function updateHistory(city) {
 
 
@@ -321,7 +322,16 @@ function getHistory() {
 // Saves the search history to localstorage
 function saveHistory(arrCities) {
 
+	// Save to local storage.
 	localStorage.setItem("wdCities", JSON.stringify(arrCities));
+
+	// Enable the favourites button now that there's something in localstorage.
+	// Only if it wasn't already enabled.
+	if ($("#favBtn").prop("disabled")){
+
+		$("#favBtn").prop("disabled", false);
+
+	}
 
 }
 
@@ -375,6 +385,9 @@ function loadWeatherScreen() {
 		// Populate options in the search list.
 		updateSearchList();
 
+		// Enable the favourites button.
+		$("#favBtn").prop("disabled", false);
+
 	}
 	else {
 
@@ -404,6 +417,41 @@ $("#citysearch").on("submit", function (event) {
 
 });
 
+
+// Listener for the Favourites button. This button toggles the favourites screen.
+$("#favBtn").on("click", function (event) {
+
+	event.preventDefault();
+
+	// Populate the favourites list from localstorage.
+
+
+	// Toggle visibility of the favourites screen.
+	if (strCurrentDisplay === "#favDisplay") {
+
+		$(strCurrentDisplay).hide();
+		$(strPreviousDisplay).show();
+		strCurrentDisplay = strPreviousDisplay;
+
+		// Change the button appearance.
+		$(this).removeClass("btn-warning");
+
+	}
+	else {
+
+
+		$(strCurrentDisplay).hide();
+		strPreviousDisplay = strCurrentDisplay;
+		$("#favDisplay").show();
+		strCurrentDisplay = "#favDisplay";
+
+		// Change the button appearance.
+		$(this).addClass("btn-warning");
+
+	}
+
+
+});
 
 
 // When the page loads, call loadWeatherScreen to render the page.
