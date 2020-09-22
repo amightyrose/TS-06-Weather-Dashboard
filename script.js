@@ -1,8 +1,6 @@
 
-
 var strAPIKey = "c0a33413999e48a90c147ca5b83f5dc1";
 var strCurrentDisplay;
-
 
 
 
