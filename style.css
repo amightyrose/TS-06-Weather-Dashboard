@@ -34,3 +34,7 @@ main {
 	font-size: 1em;
 	font-weight: normal;
 }
+
+.info-display {
+	display: none;
+}

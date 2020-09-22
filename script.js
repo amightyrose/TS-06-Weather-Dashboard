@@ -1,6 +1,7 @@
 
 
 var strAPIKey = "c0a33413999e48a90c147ca5b83f5dc1";
+var strCurrentDisplay;
 
 
 
@@ -128,6 +129,12 @@ function getForecast(lat, lon) {
 function renderCurrent(type, data) {
 
 
+	// Update strCurrentDisplay and show/hide divs.
+	if (strCurrentDisplay) {$(strCurrentDisplay).hide();}
+	$("#weatherDisplay").show();
+	strCurrentDisplay = "#weatherDisplay";
+
+
 	if (type === "weather") {
 
 		// $("#current").text(JSON.stringify(data));
@@ -152,7 +159,7 @@ function renderCurrent(type, data) {
 				$("#cur-uvi").css("color", "#bfbfbf");
 				break;
 			case (data < 6):
-				$("#cur-uvi").css("background-color", "#dfdf20");
+				$("#cur-uvi").css("background-color", "#ffcc33");
 				$("#cur-uvi").css("color", "#1a1a1a");
 				break;
 			case (data < 8):
@@ -190,9 +197,8 @@ function renderForecast(forecastData) {
 
 		// Convert some of the numerical data to strings and add some formatting.
 		let strIconURL = "http://openweathermap.org/img/wn/" + day.icon + "@2x.png"
-		let strDegree = String.fromCharCode(176);
-		let strMax = `${day.temp_max}${strDegree}`
-		let strMin = `${day.temp_min}${strDegree}`
+		let strMax = `${day.temp_max}`
+		let strMin = `${day.temp_min}`
 		let strHumidity = `${day.humidity}%`
 		let strPOP = Math.floor(day.rain_chance * 100).toString() + "%";
 
@@ -218,7 +224,7 @@ function updateHistory(city) {
 
 
 	// First set the MRU in localstorage
-	localStorage.setItem("weatherMRU", city);
+	localStorage.setItem("wdMRU", city);
 
 
 	// Try and get items from storage. An array will be returned but it will be empty if there was nothing
@@ -276,7 +282,7 @@ function updateSearchList() {
 function getHistory() {
 
 
-	let arrCities = localStorage.getItem("cities");
+	let arrCities = localStorage.getItem("wdCities");
 
 	if (arrCities === null) {
 
@@ -296,7 +302,7 @@ function getHistory() {
 // Saves the search history to localstorage
 function saveHistory(arrCities) {
 
-	localStorage.setItem("cities", JSON.stringify(arrCities));
+	localStorage.setItem("wdCities", JSON.stringify(arrCities));
 
 }
 
@@ -304,7 +310,7 @@ function saveHistory(arrCities) {
 // Function to retrieve the most recently searched city from storage.
 function getMRU() {
 
-	let mruCity = localStorage.getItem("weatherMRU");
+	let mruCity = localStorage.getItem("wdMRU");
 	return mruCity;
 
 }
@@ -318,10 +324,21 @@ function loadWeatherScreen() {
 	let city = getMRU();
 
 	if (city) {
-		getWeatherData(city);
-	}
 
-	updateSearchList();
+		// Get weather data.
+		getWeatherData(city);
+
+		// Populate options in the search list.
+		updateSearchList();
+
+	}
+	else {
+
+		// Show the welcome screen and update strCurrentDisplay.
+		$("#welcomeDisplay").show();
+		strCurrentDisplay = "#welcomeDisplay";
+
+	}
 
 
 }

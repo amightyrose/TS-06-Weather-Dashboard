@@ -38,140 +38,171 @@
 			</header>
 
 
-			<!-- Main section displaying all the weather data -->
-			<main class="row py-4">
+			<!-- Main section displaying all the weather data, welcome and error screens. -->
+			<main class="py-4">
 
 
-				<!-- First column of the main row holds current weather -->
-				<div class="col-md-5 px-5">
+				<!-- Div containing weather info. Hidden to start with. -->
+				<div class="info-display" id="weatherDisplay">
 
-					<!-- City name, date -->
-					<h2 class= "text-white" id="city-name"></h2>
-					<p id="current-date" class="text-muted"></p>
+					<div class="row">
 
-					<!-- Current temp and weather icon -->
-					<div class="row align-items-center">
-						<p class="col-md-7 display-3 text-white">
-							<span id="current-temp"></span><span class="superscript">&#8451;</span>
-						</p>
-						<p class="col-md-5">
-							<img id="current-icon">
-						</p>
+						<!-- First column of the main row holds current weather -->
+						<div class="col-md-5 px-5">
+
+							<!-- City name, date -->
+							<h2 class= "text-white" id="city-name"></h2>
+							<p id="current-date" class="text-muted"></p>
+
+							<!-- Current temp and weather icon -->
+							<div class="row align-items-center">
+								<p class="col-md-7 display-3 text-white">
+									<span id="current-temp"></span><span class="superscript">&#8451;</span>
+								</p>
+								<p class="col-md-5">
+									<img id="current-icon">
+								</p>
+							</div>
+
+							<!-- Other current weather details -->
+							<p class="current-data border-bottom border-light">Humidity<span class="data-value" id="cur-humidity"></span></p>
+							<p class="current-data border-bottom border-light">Wind<span class="data-value" id="cur-wind"></span></p>
+							<p class="current-data">UV Index<span class="badge badge-primary data-value" id="cur-uvi"></span></p>
+
+						</div>
+						<!-- End first column -->
+
+
+						<!-- Second column of the main row holds forecast data -->
+						<div class="col-md-7 px-5">
+
+							<!-- Forecast header -->
+							<h3 class="text-white mb-3">5-day Forecast</h3>
+
+							<!-- Day 0 forecast -->
+							<div id="fcast-0">
+								<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-0">
+									<span class="fcast-day"></span>
+									Max <span class="fcast-max ml-2"></span>
+								</h4>
+								<div class="row px-2 collapse show" id="fcast-data-0">
+									<div class="col-md-4">
+										<p class="text-muted fcast-date">date</p>
+										<img class="fcast-img">
+									</div>
+									<div class="col-md-8">
+										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
+										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
+										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Day 1 forecast -->
+							<div id="fcast-1">
+								<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-1">
+									<span class="fcast-day"></span>
+									Max <span class="fcast-max ml-2"></span>
+								</h4>
+								<div class="row px-2 collapse" id="fcast-data-1">
+									<div class="col-md-4">
+										<p class="text-muted fcast-date">date</p>
+										<img class="fcast-img">
+									</div>
+									<div class="col-md-8">
+										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
+										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
+										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Day 2 forecast -->
+							<div id="fcast-2">
+								<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-2">
+									<span class="fcast-day"></span>
+									Max <span class="fcast-max ml-2"></span>
+								</h4>
+								<div class="row px-2 collapse" id="fcast-data-2">
+									<div class="col-md-4">
+										<p class="text-muted fcast-date">date</p>
+										<img class="fcast-img">
+									</div>
+									<div class="col-md-8">
+										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
+										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
+										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Day 3 forecast -->
+							<div id="fcast-3">
+								<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-3">
+									<span class="fcast-day"></span>
+									Max <span class="fcast-max ml-2"></span>
+								</h4>
+								<div class="row px-2 collapse" id="fcast-data-3">
+									<div class="col-md-4">
+										<p class="text-muted fcast-date">date</p>
+										<img class="fcast-img">
+									</div>
+									<div class="col-md-8">
+										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
+										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
+										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Day 4 forecast -->
+							<div id="fcast-4">
+								<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-4">
+									<span class="fcast-day"></span>
+									Max <span class="fcast-max ml-2"></span>
+								</h4>
+								<div class="row px-2 collapse" id="fcast-data-4">
+									<div class="col-md-4">
+										<p class="text-muted fcast-date">date</p>
+										<img class="fcast-img">
+									</div>
+									<div class="col-md-8">
+										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
+										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
+										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<!-- End second column  -->
+
+
 					</div>
-
-					<!-- Other current weather details -->
-					<p class="current-data border-bottom border-light">Humidity<span class="data-value" id="cur-humidity"></span></p>
-					<p class="current-data border-bottom border-light">Wind<span class="data-value" id="cur-wind"></span></p>
-					<p class="current-data">UV Index<span class="badge data-value" id="cur-uvi"></span></p>
 
 				</div>
-				<!-- End first column -->
+				<!-- End of weather info div -->
 
 
-				<!-- Second column of the main row holds forecast data -->
-				<div class="col-md-7 px-5">
+				<!-- Div containing the welcome screen. This is shown when the page loads unless there is -->
+				<!-- an MRU entry in localstorage. -->
+				<div class="info-display" id="welcomeDisplay">
 
-					<!-- Forecast header -->
-					<h3 class="text-white mb-3">5-day Forecast</h3>
+					<div class="row text-white">
 
-					<!-- Day 0 forecast -->
-					<div id="fcast-0">
-						<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-0">
-							<span class="fcast-day"></span>
-							Max <span class="fcast-max ml-2"></span>
-						</h4>
-						<div class="row px-2 collapse show" id="fcast-data-0">
-							<div class="col-md-4">
-								<p class="text-muted fcast-date">date</p>
-								<img class="fcast-img">
-							</div>
-							<div class="col-md-8">
-								<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
-								<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-								<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
-							</div>
+						<div class="col">
+							<p class="display-4 text-center">
+								Welcome to the Weather Dashboard
+							</p>
+							<p class="text-center">
+								It looks like this is your first time using the weather dashboard. To get started, search for a city in the top search box.
+							</p>
 						</div>
-					</div>
 
-					<!-- Day 1 forecast -->
-					<div id="fcast-1">
-						<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-1">
-							<span class="fcast-day"></span>
-							Max <span class="fcast-max ml-2"></span>
-						</h4>
-						<div class="row px-2 collapse" id="fcast-data-1">
-							<div class="col-md-4">
-								<p class="text-muted fcast-date">date</p>
-								<img class="fcast-img">
-							</div>
-							<div class="col-md-8">
-								<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
-								<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-								<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Day 2 forecast -->
-					<div id="fcast-2">
-						<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-2">
-							<span class="fcast-day"></span>
-							Max <span class="fcast-max ml-2"></span>
-						</h4>
-						<div class="row px-2 collapse" id="fcast-data-2">
-							<div class="col-md-4">
-								<p class="text-muted fcast-date">date</p>
-								<img class="fcast-img">
-							</div>
-							<div class="col-md-8">
-								<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
-								<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-								<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Day 3 forecast -->
-					<div id="fcast-3">
-						<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-3">
-							<span class="fcast-day"></span>
-							Max <span class="fcast-max ml-2"></span>
-						</h4>
-						<div class="row px-2 collapse" id="fcast-data-3">
-							<div class="col-md-4">
-								<p class="text-muted fcast-date">date</p>
-								<img class="fcast-img">
-							</div>
-							<div class="col-md-8">
-								<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
-								<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-								<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Day 4 forecast -->
-					<div id="fcast-4">
-						<h4 class="btn btn-block btn-secondary text-right px-2" data-toggle="collapse" data-target="#fcast-data-4">
-							<span class="fcast-day"></span>
-							Max <span class="fcast-max ml-2"></span>
-						</h4>
-						<div class="row px-2 collapse" id="fcast-data-4">
-							<div class="col-md-4">
-								<p class="text-muted fcast-date">date</p>
-								<img class="fcast-img">
-							</div>
-							<div class="col-md-8">
-								<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
-								<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-								<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
-							</div>
-						</div>
 					</div>
 
 				</div>
-				<!-- End second column  -->
-
+				<!-- End of welcome screen div -->
 
 			</main>
 
