@@ -45,6 +45,9 @@ function getWeatherData(location) {
 			// Get latitude and longitude from the response then call getForecast to get the remaining data.
 			getForecast(response.coord.lat, response.coord.lon);
 
+			// Call updateHistory to add the city to the list.
+			updateHistory(location);
+
 		},
 		error: function (objRequest) {
 
@@ -71,6 +74,7 @@ function getForecast(lat, lon) {
 
 	// Make an ajax call.
 	$.ajax({
+
 
 		type: "GET",
 		url: strQueryURL,
@@ -123,7 +127,18 @@ function getForecast(lat, lon) {
 			renderForecast(arrDailyData);
 
 
+		},
+		error: function (objRequest) {
+
+			if (objRequest.status === 404) {
+				showError(404);
+			}
+			else {
+				showError("fail");
+			}
+
 		}
+
 
 	});
 
@@ -384,8 +399,7 @@ $("#citysearch").on("submit", function (event) {
 	// Clear the search box.
 	$("#cityselect").val("");
 
-	// Call updateHistory to add the submitted value to the list.
-	updateHistory(selectedCity);
+
 
 	// Call getWeatherData to start collecting.
 	getWeatherData(selectedCity);
