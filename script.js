@@ -325,11 +325,11 @@ function saveHistory(arrCities) {
 	// Save to local storage.
 	localStorage.setItem("wdCities", JSON.stringify(arrCities));
 
-	// Enable the favourites button now that there's something in localstorage.
+	// Enable the history button now that there's something in localstorage.
 	// Only if it wasn't already enabled.
-	if ($("#favBtn").prop("disabled")){
+	if ($("#historyBtn").prop("disabled")){
 
-		$("#favBtn").prop("disabled", false);
+		$("#historyBtn").prop("disabled", false);
 
 	}
 
@@ -385,8 +385,8 @@ function loadWeatherScreen() {
 		// Populate options in the search list.
 		updateSearchList();
 
-		// Enable the favourites button.
-		$("#favBtn").prop("disabled", false);
+		// Enable the history button.
+		$("#historyBtn").prop("disabled", false);
 
 	}
 	else {
@@ -418,16 +418,28 @@ $("#citysearch").on("submit", function (event) {
 });
 
 
-// Listener for the Favourites button. This button toggles the favourites screen.
-$("#favBtn").on("click", function (event) {
+// Listener for the history button. This button toggles the history screen.
+$("#historyBtn").on("click", function (event) {
+
 
 	event.preventDefault();
 
-	// Populate the favourites list from localstorage.
+	// Populate the history list from localstorage.
+	let arrCities = getHistory();
+
+	arrCities.forEach(function (city) {
+
+		// Add a new li to the list.
+		let newLI = $("<li>")
+		newLI.addClass("list-group-item d-flex justify-content-between align-items-center");
+		newLI.text(city);
+		$("#historyList").append(newLI);
+
+	})
 
 
-	// Toggle visibility of the favourites screen.
-	if (strCurrentDisplay === "#favDisplay") {
+	// Toggle visibility of the history screen.
+	if (strCurrentDisplay === "#historyDisplay") {
 
 		$(strCurrentDisplay).hide();
 		$(strPreviousDisplay).show();
@@ -439,11 +451,10 @@ $("#favBtn").on("click", function (event) {
 	}
 	else {
 
-
 		$(strCurrentDisplay).hide();
 		strPreviousDisplay = strCurrentDisplay;
-		$("#favDisplay").show();
-		strCurrentDisplay = "#favDisplay";
+		$("#historyDisplay").show();
+		strCurrentDisplay = "#historyDisplay";
 
 		// Change the button appearance.
 		$(this).addClass("btn-warning");
