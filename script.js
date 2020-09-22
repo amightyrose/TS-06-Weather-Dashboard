@@ -21,12 +21,10 @@ function getWeatherData(location) {
 		url: strQueryURL,
 		success: function (response) {
 
-
 			let strDay = moment.unix(response.dt).format("dddd");
 			let strDate = moment.unix(response.dt).format("D/MM/YY");
 			let strTemp = response.main.temp.toFixed(1).toString();
 			let strWindSpeed = (response.wind.speed * 3.6).toFixed(1).toString();
-
 
 			// If it's the current weather, get some values from the response and put them into the
 			// objCurrentWeather object.
@@ -44,10 +42,18 @@ function getWeatherData(location) {
 
 			renderCurrent("weather", objCurrentWeather);
 
-
 			// Get latitude and longitude from the response then call getForecast to get the remaining data.
 			getForecast(response.coord.lat, response.coord.lon);
 
+		},
+		error: function (objRequest) {
+
+			if (objRequest.status === 404) {
+				showError(404);
+			}
+			else {
+				showError("fail");
+			}
 
 		}
 
@@ -316,6 +322,31 @@ function getMRU() {
 }
 
 
+// Function to display something when something goes wrong with the search.
+function showError(error) {
+
+	let strErrorText;
+
+	if (error === "fail") {
+
+		strErrorText = "There was a problem completing your request. Please try again.";
+
+	}
+	else if (error === 404) {
+
+		strErrorText = "That city could not be found. Please try again.";
+
+	}
+
+	$("#errorText").text(strErrorText);
+	$(strCurrentDisplay).hide();
+	$("#errorDisplay").show();
+	strCurrentDisplay = "#errorDisplay"
+
+
+}
+
+
 // Function that runs when the page is first loaded. Check for the most recent city and
 // if there is one, load data for it.
 function loadWeatherScreen() {
@@ -342,7 +373,6 @@ function loadWeatherScreen() {
 
 
 }
-
 
 
 // Listener for the search field
