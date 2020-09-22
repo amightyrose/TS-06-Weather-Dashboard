@@ -10,7 +10,7 @@ function getWeatherData(location) {
 
 
 	// Build the query URL for getting current weather.
-	let strQueryURL = `http://api.openweathermap.org/data/2.5/weather?appid=${strAPIKey}&units=metric&q=${location}`
+	let strQueryURL = `https://api.openweathermap.org/data/2.5/weather?appid=${strAPIKey}&units=metric&q=${location}`
 
 
 
@@ -69,7 +69,7 @@ function getWeatherData(location) {
 function getForecast(lat, lon) {
 
 
-	let strQueryURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&units=metric&appid=${strAPIKey}`
+	let strQueryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&units=metric&appid=${strAPIKey}`
 
 
 	// Make an ajax call.
@@ -166,7 +166,7 @@ function renderCurrent(type, data) {
 		$("#cur-wind").text(`${data.windspeed} km/h`);
 
 		// Build a URL for the weather icon and then udpate the img tag.
-		let strIconURL = "http://openweathermap.org/img/wn/" + data.icon + "@2x.png"
+		let strIconURL = "https://openweathermap.org/img/wn/" + data.icon + "@2x.png"
 		$("#current-icon").attr("src", strIconURL);
 
 	}
@@ -217,7 +217,7 @@ function renderForecast(forecastData) {
 		let strFcastDiv = `#fcast-data-${i}`
 
 		// Convert some of the numerical data to strings and add some formatting.
-		let strIconURL = "http://openweathermap.org/img/wn/" + day.icon + "@2x.png"
+		let strIconURL = "https://openweathermap.org/img/wn/" + day.icon + "@2x.png"
 		let strMax = `${day.temp_max}`
 		let strMin = `${day.temp_min}`
 		let strHumidity = `${day.humidity}%`
