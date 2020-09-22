@@ -38,3 +38,7 @@ main {
 .info-display {
 	display: none;
 }
+
+#welcomeDisplay, #errorDisplay {
+	padding: 10rem 0;
+}
