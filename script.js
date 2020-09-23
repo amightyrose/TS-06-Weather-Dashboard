@@ -45,7 +45,7 @@ function getWeatherData(location) {
 			getForecast(response.coord.lat, response.coord.lon);
 
 			// Call updateHistory to add the city to the list.
-			updateHistory(location);
+			updateHistory("add", location);
 
 		},
 		error: function (objRequest) {
@@ -240,11 +240,7 @@ function renderForecast(forecastData) {
 
 
 // Function to update the list of previously searched cities in localstorage.
-function updateHistory(city) {
-
-
-	// First set the MRU in localstorage
-	localStorage.setItem("wdMRU", city);
+function updateHistory(operation, city) {
 
 
 	// Try and get items from storage. An array will be returned but it will be empty if there was nothing
@@ -252,19 +248,33 @@ function updateHistory(city) {
 	let arrHistory = getHistory();
 
 
-	// Add the new value to the array if it doesn't exist.
-	if (arrHistory.includes(city) === false) {
+	// Add or remove the city.
+	if (operation === "add") {
 
-		arrHistory.push(city);
+		// First set the MRU in localstorage
+		localStorage.setItem("wdMRU", city);
 
-		// Save back to localstorage.
-		saveHistory(arrHistory);
+		// Add the new value to the array if it doesn't exist.
+		if (arrHistory.includes(city) === false) {
+
+			arrHistory.push(city);
+
+		}
+
+	}
+	else if (operation === "remove") {
+
+		// Filter the array to remove the city.
+		arrHistory = arrHistory.filter(item => item !== city)
 
 	}
 
+	// Save back to localstorage.
+	saveHistory(arrHistory);
 
 	// Update the list we use for prepopulating the search box.
 	updateSearchList();
+
 
 }
 
@@ -496,20 +506,29 @@ $("#historyBtn").on("click", function (event) {
 });
 
 
-// Listner for the search and remove buttons on the history screen.
+// Listener for the search and remove buttons on the history screen.
 $("#historyList").on("click", "button", function () {
 
+	// Get the name of the selected item
+	let strCityName = $(this).parent().contents()[0].textContent;
 
 	// Call getWeatherData if the search button was clicked or remove the item
 	// if the remove button was clicked.
 	if ($(this).hasClass("hist-search")) {
 
-		let strCityName = $(this).parent().contents()[0].textContent;
 		hideHistory();
 		getWeatherData(strCityName);
 
 	}
+	else if ($(this).hasClass("hist-remove")) {
 
+		// Call updateHistory to remove the item from storage and the options list.
+		updateHistory("remove", strCityName);
+
+		// Remove the item from the list.
+		$(this).parent().remove();
+
+	}
 
 });
 
