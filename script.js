@@ -505,7 +505,8 @@ $("#citysearch").on("submit", function (event) {
 	// Clear the search box.
 	$("#cityselect").val("");
 
-
+	// Check to see if we're on the history screen and close it if we are.
+	hideHistory();
 
 	// Call getWeatherData to start collecting.
 	getWeatherData(selectedCity);
