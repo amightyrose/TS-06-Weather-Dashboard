@@ -3,7 +3,10 @@ main {
 	color: #bfbfbf;
 }
 
-/* Superscript text */
+.navbar-brand {
+	font-size: 1.5rem;
+}
+
 .superscript {
 	vertical-align: super;
 	font-size: .5em;

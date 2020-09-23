@@ -440,6 +440,7 @@ function showHistory() {
 	strCurrentDisplay = "#historyDisplay";
 
 	// Change the button appearance.
+	$("#historyBtn").removeClass("btn-primary");
 	$("#historyBtn").addClass("btn-warning");
 
 
@@ -457,6 +458,7 @@ function hideHistory() {
 
 	// Change the button appearance.
 	$("#historyBtn").removeClass("btn-warning");
+	$("#historyBtn").addClass("btn-primary");
 
 	// Remove items from the history ul.
 	$(".history-item").remove();
@@ -514,7 +516,7 @@ $("#citysearch").on("submit", function (event) {
 });
 
 
-// Listener for the history button. This button toggles the history screen.
+// Listener for the search history button. This button toggles the history screen.
 $("#historyBtn").on("click", function (event) {
 
 
