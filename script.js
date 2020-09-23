@@ -5,6 +5,7 @@ var strPreviousDisplay;
 
 
 
+// Function to make a request for current weather data.
 function getWeatherData(location) {
 
 
@@ -65,6 +66,7 @@ function getWeatherData(location) {
 }
 
 
+// Function to request forecast and uv index data.
 function getForecast(lat, lon) {
 
 
@@ -204,6 +206,7 @@ function renderCurrent(type, data) {
 }
 
 
+// Render forecast and uv index data on the page.
 function renderForecast(forecastData) {
 
 
@@ -277,9 +280,8 @@ function updateHistory(operation, city) {
 			localStorage.removeItem("wdMRU");
 			localStorage.removeItem("wdCities");
 
-			// Hide the remove all button and disable the history button.
+			// Disable the history button.
 			$("#historyBtn").prop("disabled", true);
-			$("#btnRemoveAll").hide();
 
 		}
 		else {
@@ -326,6 +328,7 @@ function updateSearchList() {
 
 
 }
+
 
 // This function gets items from storage and returns an array. If there was nothing in storage the array
 // is returned empty.
@@ -561,12 +564,43 @@ $("#historyList").on("click", "button", function (event) {
 		$(this).parent().remove();
 
 		// If it was the last one, change the value of strPreviousDisplay so we go back
-		// to the welcome screen after close.
+		// to the welcome screen after close. Also hide the remove all button.
 		if ($(".history-item").length === 0) {
+
 			strPreviousDisplay = $("#welcomeDisplay");
+			$("#btnRemoveAll").hide();
+
 		}
 
 	}
+
+
+});
+
+
+// Listener for the remove all button on the history screen.
+$("#btnRemoveAll").on("click", function (event) {
+
+
+	event.preventDefault();
+
+	// Remove entries from localstorage.
+	localStorage.removeItem("wdMRU");
+	localStorage.removeItem("wdCities");
+
+	// Call updateSearchList to clean up search options.
+	updateSearchList();
+
+	// Remove items from the history screen list.
+	$(".history-item").remove();
+
+	// Hide the remove all button and disable the history button.
+	$("#btnRemoveAll").hide();
+	$("#historyBtn").prop("disabled", true);
+
+
+	// Change the value of strPreviousDisplay so we go back to the welcome screen after close.
+	strPreviousDisplay = $("#welcomeDisplay");
 
 
 });
