@@ -261,16 +261,36 @@ function updateHistory(operation, city) {
 
 		}
 
+		// Save back to localstorage.
+		saveHistory(arrHistory);
+
 	}
 	else if (operation === "remove") {
 
 		// Filter the array to remove the city.
 		arrHistory = arrHistory.filter(item => item !== city)
 
+		// If there's nothing left in the array, remove the entries from localstorage and search list.
+		if (arrHistory.length === 0) {
+
+			// Remove entries from localstorage.
+			localStorage.removeItem("wdMRU");
+			localStorage.removeItem("wdCities");
+
+			// Hide the remove all button and disable the history button.
+			$("#historyBtn").prop("disabled", true);
+			$("#btnRemoveAll").hide();
+
+		}
+		else {
+
+			// Save back to localstorage.
+			saveHistory(arrHistory);
+
+		}
+
 	}
 
-	// Save back to localstorage.
-	saveHistory(arrHistory);
 
 	// Update the list we use for prepopulating the search box.
 	updateSearchList();
@@ -331,6 +351,7 @@ function getHistory() {
 
 // Saves the search history to localstorage
 function saveHistory(arrCities) {
+
 
 	// Save to local storage.
 	localStorage.setItem("wdCities", JSON.stringify(arrCities));
@@ -404,6 +425,12 @@ function showHistory() {
 
 	})
 
+	// If there are entries to show, also show the remove all button.
+	if (arrCities.length > 0) {
+		$("#btnRemoveAll").show();
+	}
+
+	// Show/hide the right screens.
 	$(strCurrentDisplay).hide();
 	strPreviousDisplay = strCurrentDisplay;
 	$("#historyDisplay").show();
@@ -507,10 +534,15 @@ $("#historyBtn").on("click", function (event) {
 
 
 // Listener for the search and remove buttons on the history screen.
-$("#historyList").on("click", "button", function () {
+$("#historyList").on("click", "button", function (event) {
+
+
+	event.preventDefault();
+
 
 	// Get the name of the selected item
 	let strCityName = $(this).parent().contents()[0].textContent;
+
 
 	// Call getWeatherData if the search button was clicked or remove the item
 	// if the remove button was clicked.
@@ -528,9 +560,25 @@ $("#historyList").on("click", "button", function () {
 		// Remove the item from the list.
 		$(this).parent().remove();
 
+		// If it was the last one, change the value of strPreviousDisplay so we go back
+		// to the welcome screen after close.
+		if ($(".history-item").length === 0) {
+			strPreviousDisplay = $("#welcomeDisplay");
+		}
+
 	}
 
+
 });
+
+
+// Listener for the close button on the history screen.
+$("#btnHistClose").on("click", function (event) {
+
+	event.preventDefault();
+	hideHistory();
+
+})
 
 
 // When the page loads, call loadWeatherScreen to render the page.
