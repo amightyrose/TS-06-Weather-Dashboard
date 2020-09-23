@@ -28,7 +28,7 @@
 					Weather Dashboard
 				</h1>
 
-				<button class="btn ml-auto mr-5 text-white" id="historyBtn" autocomplete="off" disabled>History</button>
+				<button class="btn ml-auto mr-4 text-white" id="historyBtn" autocomplete="off" disabled>Search History</button>
 
 				<form class="form-inline" id="citysearch">
 					<input type="search" list="history" placeholder="Search for a city" class="form-control" name="cityselect" id="cityselect">
@@ -95,7 +95,7 @@
 									<div class="col-md-8">
 										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
 										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+										<p class="fcast-data ">Chance of precipitation<span class="data-value fcast-pop"></span></p>
 									</div>
 								</div>
 							</div>
@@ -114,7 +114,7 @@
 									<div class="col-md-8">
 										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
 										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+										<p class="fcast-data ">Chance of precipitation<span class="data-value fcast-pop"></span></p>
 									</div>
 								</div>
 							</div>
@@ -133,7 +133,7 @@
 									<div class="col-md-8">
 										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
 										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+										<p class="fcast-data ">Chance of precipitation<span class="data-value fcast-pop"></span></p>
 									</div>
 								</div>
 							</div>
@@ -152,7 +152,7 @@
 									<div class="col-md-8">
 										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
 										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+										<p class="fcast-data ">Chance of precipitation<span class="data-value fcast-pop"></span></p>
 									</div>
 								</div>
 							</div>
@@ -171,7 +171,7 @@
 									<div class="col-md-8">
 										<p class="fcast-data border-bottom border-light">Min<span class="data-value fcast-min"></span></p>
 										<p class="fcast-data border-bottom border-light">Humidity<span class="data-value fcast-humidity"></span></p>
-										<p class="fcast-data ">Chance of rain<span class="data-value fcast-pop"></span></p>
+										<p class="fcast-data ">Chance of precipitation<span class="data-value fcast-pop"></span></p>
 									</div>
 								</div>
 							</div>
@@ -219,18 +219,13 @@
 				<div class="info-display" id="historyDisplay">
 
 					<div class="container px-5">
-						<h3 class="text-center text-white">History</h3>
+
+						<h3 class="text-center text-white">Search History</h3>
 						<p class="text-white">When you search for a city it will be saved to this list.</p>
+
 						<ul class="list-group" id="historyList">
-							<li class="list-group-item d-flex align-items-left">
-							  Cras justo odio
+						</ul>
 
-							  <button class="btn btn-sm btn-primary ml-auto">Search</button>
-							  <button class="btn btn-sm btn-danger ml-2">Remove</button>
-
-							</li>
-
-						  </ul>
 					</div>
 
 				</div>

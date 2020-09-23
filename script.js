@@ -370,6 +370,61 @@ function showError(error) {
 }
 
 
+// This function displays the history screen.
+function showHistory() {
+
+
+	// Populate the history list from localstorage.
+	let arrCities = getHistory();
+
+	arrCities.forEach(function (city) {
+
+		// Add a new li to the list.
+		// First create the new li, add classes and text.
+		let newLI = $("<li>")
+		newLI.addClass("list-group-item d-flex align-items-left history-item");
+		newLI.text(city);
+
+		// Add the search and remove buttons to the li.
+		newLI.append(`<button class="btn btn-sm btn-primary ml-auto hist-search">Search</button>`);
+		newLI.append(`<button class="btn btn-sm btn-danger ml-2 hist-remove">Remove</button>`);
+
+		// Append the new history entry to the list.
+		$("#historyList").append(newLI);
+
+	})
+
+	$(strCurrentDisplay).hide();
+	strPreviousDisplay = strCurrentDisplay;
+	$("#historyDisplay").show();
+	strCurrentDisplay = "#historyDisplay";
+
+	// Change the button appearance.
+	$("#historyBtn").addClass("btn-warning");
+
+
+}
+
+
+// This function hides the history screen and displays the screen that was showing prior
+// to it being opened.
+function hideHistory() {
+
+
+	$(strCurrentDisplay).hide();
+	$(strPreviousDisplay).show();
+	strCurrentDisplay = strPreviousDisplay;
+
+	// Change the button appearance.
+	$("#historyBtn").removeClass("btn-warning");
+
+	// Remove items from the history ul.
+	$(".history-item").remove();
+
+
+}
+
+
 // Function that runs when the page is first loaded. Check for the most recent city and
 // if there is one, load data for it.
 function loadWeatherScreen() {
@@ -424,40 +479,34 @@ $("#historyBtn").on("click", function (event) {
 
 	event.preventDefault();
 
-	// Populate the history list from localstorage.
-	let arrCities = getHistory();
-
-	arrCities.forEach(function (city) {
-
-		// Add a new li to the list.
-		let newLI = $("<li>")
-		newLI.addClass("list-group-item d-flex justify-content-between align-items-center");
-		newLI.text(city);
-		$("#historyList").append(newLI);
-
-	})
-
 
 	// Toggle visibility of the history screen.
 	if (strCurrentDisplay === "#historyDisplay") {
 
-		$(strCurrentDisplay).hide();
-		$(strPreviousDisplay).show();
-		strCurrentDisplay = strPreviousDisplay;
-
-		// Change the button appearance.
-		$(this).removeClass("btn-warning");
+		hideHistory();
 
 	}
 	else {
 
-		$(strCurrentDisplay).hide();
-		strPreviousDisplay = strCurrentDisplay;
-		$("#historyDisplay").show();
-		strCurrentDisplay = "#historyDisplay";
+		showHistory();
 
-		// Change the button appearance.
-		$(this).addClass("btn-warning");
+	}
+
+
+});
+
+
+// Listner for the search and remove buttons on the history screen.
+$("#historyList").on("click", "button", function () {
+
+
+	// Call getWeatherData if the search button was clicked or remove the item
+	// if the remove button was clicked.
+	if ($(this).hasClass("hist-search")) {
+
+		let strCityName = $(this).parent().contents()[0].textContent;
+		hideHistory();
+		getWeatherData(strCityName);
 
 	}
 
