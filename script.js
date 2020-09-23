@@ -1,9 +1,11 @@
 
 var strAPIKey = "c0a33413999e48a90c147ca5b83f5dc1";
 var strCurrentDisplay;
+var strPreviousDisplay;
 
 
 
+// Function to make a request for current weather data.
 function getWeatherData(location) {
 
 
@@ -44,7 +46,7 @@ function getWeatherData(location) {
 			getForecast(response.coord.lat, response.coord.lon);
 
 			// Call updateHistory to add the city to the list.
-			updateHistory(location);
+			updateHistory("add", location);
 
 		},
 		error: function (objRequest) {
@@ -64,6 +66,7 @@ function getWeatherData(location) {
 }
 
 
+// Function to request forecast and uv index data.
 function getForecast(lat, lon) {
 
 
@@ -203,6 +206,7 @@ function renderCurrent(type, data) {
 }
 
 
+// Render forecast and uv index data on the page.
 function renderForecast(forecastData) {
 
 
@@ -238,12 +242,8 @@ function renderForecast(forecastData) {
 }
 
 
-// Function to update the list of previously searched cities.
-function updateHistory(city) {
-
-
-	// First set the MRU in localstorage
-	localStorage.setItem("wdMRU", city);
+// Function to update the list of previously searched cities in localstorage.
+function updateHistory(operation, city) {
 
 
 	// Try and get items from storage. An array will be returned but it will be empty if there was nothing
@@ -251,19 +251,52 @@ function updateHistory(city) {
 	let arrHistory = getHistory();
 
 
-	// Add the new value to the array if it doesn't exist.
-	if (arrHistory.includes(city) === false) {
+	// Add or remove the city.
+	if (operation === "add") {
 
-		arrHistory.push(city);
+		// First set the MRU in localstorage
+		localStorage.setItem("wdMRU", city);
+
+		// Add the new value to the array if it doesn't exist.
+		if (arrHistory.includes(city) === false) {
+
+			arrHistory.push(city);
+
+		}
 
 		// Save back to localstorage.
 		saveHistory(arrHistory);
+
+	}
+	else if (operation === "remove") {
+
+		// Filter the array to remove the city.
+		arrHistory = arrHistory.filter(item => item !== city)
+
+		// If there's nothing left in the array, remove the entries from localstorage and search list.
+		if (arrHistory.length === 0) {
+
+			// Remove entries from localstorage.
+			localStorage.removeItem("wdMRU");
+			localStorage.removeItem("wdCities");
+
+			// Disable the history button.
+			$("#historyBtn").prop("disabled", true);
+
+		}
+		else {
+
+			// Save back to localstorage.
+			saveHistory(arrHistory);
+
+		}
 
 	}
 
 
 	// Update the list we use for prepopulating the search box.
 	updateSearchList();
+
 
 }
 
@@ -296,6 +329,7 @@ function updateSearchList() {
 
 }
 
+
 // This function gets items from storage and returns an array. If there was nothing in storage the array
 // is returned empty.
 function getHistory() {
@@ -321,7 +355,17 @@ function getHistory() {
 // Saves the search history to localstorage
 function saveHistory(arrCities) {
 
+
+	// Save to local storage.
 	localStorage.setItem("wdCities", JSON.stringify(arrCities));
+
+	// Enable the history button now that there's something in localstorage.
+	// Only if it wasn't already enabled.
+	if ($("#historyBtn").prop("disabled")){
+
+		$("#historyBtn").prop("disabled", false);
+
+	}
 
 }
 
@@ -360,6 +404,69 @@ function showError(error) {
 }
 
 
+// This function displays the history screen.
+function showHistory() {
+
+
+	// Populate the history list from localstorage.
+	let arrCities = getHistory();
+
+	arrCities.forEach(function (city) {
+
+		// Add a new li to the list.
+		// First create the new li, add classes and text.
+		let newLI = $("<li>")
+		newLI.addClass("list-group-item d-flex align-items-left history-item");
+		newLI.text(city);
+
+		// Add the search and remove buttons to the li.
+		newLI.append(`<button class="btn btn-sm btn-primary ml-auto hist-search">Search</button>`);
+		newLI.append(`<button class="btn btn-sm btn-danger ml-2 hist-remove">Remove</button>`);
+
+		// Append the new history entry to the list.
+		$("#historyList").append(newLI);
+
+	})
+
+	// If there are entries to show, also show the remove all button.
+	if (arrCities.length > 0) {
+		$("#btnRemoveAll").show();
+	}
+
+	// Show/hide the right screens.
+	$(strCurrentDisplay).hide();
+	strPreviousDisplay = strCurrentDisplay;
+	$("#historyDisplay").show();
+	strCurrentDisplay = "#historyDisplay";
+
+	// Change the button appearance.
+	$("#historyBtn").removeClass("btn-primary");
+	$("#historyBtn").addClass("btn-warning");
+
+
+}
+
+
+// This function hides the history screen and displays the screen that was showing prior
+// to it being opened.
+function hideHistory() {
+
+
+	$(strCurrentDisplay).hide();
+	$(strPreviousDisplay).show();
+	strCurrentDisplay = strPreviousDisplay;
+
+	// Change the button appearance.
+	$("#historyBtn").removeClass("btn-warning");
+	$("#historyBtn").addClass("btn-primary");
+
+	// Remove items from the history ul.
+	$(".history-item").remove();
+
+
+}
+
+
 // Function that runs when the page is first loaded. Check for the most recent city and
 // if there is one, load data for it.
 function loadWeatherScreen() {
@@ -374,6 +481,9 @@ function loadWeatherScreen() {
 
 		// Populate options in the search list.
 		updateSearchList();
+
+		// Enable the history button.
+		$("#historyBtn").prop("disabled", false);
 
 	}
 	else {
@@ -397,13 +507,115 @@ $("#citysearch").on("submit", function (event) {
 	// Clear the search box.
 	$("#cityselect").val("");
 
-
+	// Check to see if we're on the history screen and close it if we are.
+	hideHistory();
 
 	// Call getWeatherData to start collecting.
 	getWeatherData(selectedCity);
 
 });
 
+
+// Listener for the search history button. This button toggles the history screen.
+$("#historyBtn").on("click", function (event) {
+
+
+	event.preventDefault();
+
+
+	// Toggle visibility of the history screen.
+	if (strCurrentDisplay === "#historyDisplay") {
+
+		hideHistory();
+
+	}
+	else {
+
+		showHistory();
+
+	}
+
+
+});
+
+
+// Listener for the search and remove buttons on the history screen.
+$("#historyList").on("click", "button", function (event) {
+
+
+	event.preventDefault();
+
+
+	// Get the name of the selected item
+	let strCityName = $(this).parent().contents()[0].textContent;
+
+
+	// Call getWeatherData if the search button was clicked or remove the item
+	// if the remove button was clicked.
+	if ($(this).hasClass("hist-search")) {
+
+		hideHistory();
+		getWeatherData(strCityName);
+
+	}
+	else if ($(this).hasClass("hist-remove")) {
+
+		// Call updateHistory to remove the item from storage and the options list.
+		updateHistory("remove", strCityName);
+
+		// Remove the item from the list.
+		$(this).parent().remove();
+
+		// If it was the last one, change the value of strPreviousDisplay so we go back
+		// to the welcome screen after close. Also hide the remove all button.
+		if ($(".history-item").length === 0) {
+
+			strPreviousDisplay = $("#welcomeDisplay");
+			$("#btnRemoveAll").hide();
+
+		}
+
+	}
+
+
+});
+
+
+// Listener for the remove all button on the history screen.
+$("#btnRemoveAll").on("click", function (event) {
+
+
+	event.preventDefault();
+
+	// Remove entries from localstorage.
+	localStorage.removeItem("wdMRU");
+	localStorage.removeItem("wdCities");
+
+	// Call updateSearchList to clean up search options.
+	updateSearchList();
+
+	// Remove items from the history screen list.
+	$(".history-item").remove();
+
+	// Hide the remove all button and disable the history button.
+	$("#btnRemoveAll").hide();
+	$("#historyBtn").prop("disabled", true);
+
+
+	// Change the value of strPreviousDisplay so we go back to the welcome screen after close.
+	strPreviousDisplay = $("#welcomeDisplay");
+
+
+});
+
+
+// Listener for the close button on the history screen.
+$("#btnHistClose").on("click", function (event) {
+
+	event.preventDefault();
+	hideHistory();
+
+})
 
 
 // When the page loads, call loadWeatherScreen to render the page.
